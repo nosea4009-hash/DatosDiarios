@@ -1,0 +1,81 @@
+ciudad,provincia,lat,lon,categoria
+Buenos Aires,Ciudad Autonoma de Buenos Aires,-34.6037,-58.3816,capital_nacional
+La Plata,Buenos Aires,-34.9215,-57.9545,capital_provincial
+Mar del Plata,Buenos Aires,-38.0055,-57.5426,ciudad
+Bahia Blanca,Buenos Aires,-38.7183,-62.2663,ciudad
+Tandil,Buenos Aires,-37.3217,-59.1332,ciudad
+Mercedes,Buenos Aires,-34.6520,-59.4306,ciudad
+Junin,Buenos Aires,-34.5838,-60.9433,ciudad
+Pergamino,Buenos Aires,-33.8964,-60.5738,ciudad
+Necochea,Buenos Aires,-38.5545,-58.7392,ciudad
+Olavarria,Buenos Aires,-36.8927,-60.3225,ciudad
+San Nicolas de los Arroyos,Buenos Aires,-33.3333,-60.2167,ciudad
+Zarate,Buenos Aires,-34.0967,-59.0286,ciudad
+Lujan,Buenos Aires,-34.5703,-59.1052,ciudad
+Trenque Lauquen,Buenos Aires,-35.9700,-62.7364,ciudad
+Azul,Buenos Aires,-36.7769,-59.8586,ciudad
+Cordoba,Cordoba,-31.4201,-64.1888,capital_provincial
+Rio Cuarto,Cordoba,-33.1232,-64.3492,ciudad
+Villa Maria,Cordoba,-32.4076,-63.2402,ciudad
+San Francisco,Cordoba,-31.4283,-62.0828,ciudad
+Bell Ville,Cordoba,-32.6259,-62.6889,ciudad
+Villa Carlos Paz,Cordoba,-31.4241,-64.4978,ciudad
+Rosario,Santa Fe,-32.9468,-60.6393,ciudad
+Santa Fe,Santa Fe,-31.6333,-60.7000,capital_provincial
+Rafaela,Santa Fe,-31.2503,-61.4867,ciudad
+Reconquista,Santa Fe,-29.1500,-59.6500,ciudad
+Venado Tuerto,Santa Fe,-33.7444,-61.9689,ciudad
+Mendoza,Mendoza,-32.8908,-68.8272,capital_provincial
+San Rafael,Mendoza,-34.6177,-68.3301,ciudad
+San Martin,Mendoza,-33.0806,-68.4708,ciudad
+Malargue,Mendoza,-35.4756,-69.5836,ciudad
+San Juan,San Juan,-31.5375,-68.5364,capital_provincial
+Rawson,San Juan,-31.5883,-68.5372,ciudad
+San Luis,San Luis,-33.2950,-66.3356,capital_provincial
+Villa Mercedes,San Luis,-33.6786,-65.4600,ciudad
+Salta,Salta,-24.7859,-65.4117,capital_provincial
+San Ramon de la Nueva Oran,Salta,-23.1367,-64.3253,ciudad
+Tartagal,Salta,-22.5333,-63.8000,ciudad
+Jujuy,Jujuy,-24.1858,-65.2995,capital_provincial
+Humahuaca,Jujuy,-23.2058,-65.3508,ciudad
+Tucuman,Tucuman,-26.8083,-65.2176,capital_provincial
+Concepcion,Tucuman,-27.3308,-65.5947,ciudad
+Santiago del Estero,Santiago del Estero,-27.7834,-64.2642,capital_provincial
+La Banda,Santiago del Estero,-27.7331,-64.2447,ciudad
+Resistencia,Chaco,-27.4514,-58.9867,capital_provincial
+Presidencia Roque Saenz Pena,Chaco,-26.7833,-60.4333,ciudad
+Formosa,Formosa,-26.1775,-58.1781,capital_provincial
+Clorinda,Formosa,-25.2867,-57.7250,ciudad
+Corrientes,Corrientes,-27.4806,-58.8341,capital_provincial
+Goya,Corrientes,-29.1394,-59.2636,ciudad
+Posadas,Misiones,-27.3671,-55.8961,capital_provincial
+Oberá,Misiones,-27.4869,-55.1197,ciudad
+Puerto Iguazu,Misiones,-25.5975,-54.5769,ciudad
+Eldorado,Misiones,-26.4022,-54.6167,ciudad
+Parana,Entre Rios,-31.7333,-60.5297,capital_provincial
+Concordia,Entre Rios,-31.3931,-58.0181,ciudad
+Gualeguaychu,Entre Rios,-33.0094,-58.5172,ciudad
+Concepcion del Uruguay,Entre Rios,-32.4825,-58.2372,ciudad
+Santa Rosa,La Pampa,-36.6167,-64.2833,capital_provincial
+General Pico,La Pampa,-35.6667,-63.7500,ciudad
+Neuquen,Neuquen,-38.9516,-68.0591,capital_provincial
+Zapala,Neuquen,-38.9000,-70.0667,ciudad
+San Martin de los Andes,Neuquen,-40.1576,-71.3529,ciudad
+Villa La Angostura,Neuquen,-40.7614,-71.6444,ciudad
+Rio Negro Viedma,Rio Negro,-40.8135,-62.9967,capital_provincial
+San Carlos de Bariloche,Rio Negro,-41.1335,-71.3103,ciudad
+General Roca,Rio Negro,-39.0333,-67.5833,ciudad
+Cipolletti,Rio Negro,-38.9333,-67.9833,ciudad
+Rawson Chubut,Chubut,-43.3002,-65.1023,capital_provincial
+Comodoro Rivadavia,Chubut,-45.8647,-67.4822,ciudad
+Trelew,Chubut,-43.2489,-65.3050,ciudad
+Puerto Madryn,Chubut,-42.7692,-65.0385,ciudad
+Esquel,Chubut,-42.9106,-71.3272,ciudad
+Rio Gallegos,Santa Cruz,-51.6230,-69.2168,capital_provincial
+Caleta Olivia,Santa Cruz,-46.4402,-67.5288,ciudad
+El Calafate,Santa Cruz,-50.3379,-72.2648,ciudad
+Ushuaia,Tierra del Fuego,-54.8019,-68.3030,capital_provincial
+Rio Grande,Tierra del Fuego,-53.7877,-67.7093,ciudad
+Catamarca,Catamarca,-28.4696,-65.7852,capital_provincial
+La Rioja,La Rioja,-29.4131,-66.8558,capital_provincial
+Chilecito,La Rioja,-29.1667,-67.5000,ciudad

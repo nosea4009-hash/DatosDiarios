@@ -1,0 +1,26 @@
+# Cache de archivos NetCDF descargados del bucket del SMN (pesados, no versionar)
+cache/
+
+# PNGs generados (salidas del usuario, no versionar)
+salidas/
+
+# geojson personales del usuario (pueden ser pesados o privados); se
+# mantiene el directorio via .gitkeep pero no su contenido
+data/geojson/*
+!data/geojson/.gitkeep
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+
+# VSCode
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
