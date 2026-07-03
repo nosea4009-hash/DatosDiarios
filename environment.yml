@@ -1,0 +1,28 @@
+# Entorno de conda para el proyecto DatosDiarios (WRF-SMN 4km plots).
+#
+# Instalacion (miniconda3 / anaconda):
+#
+#   conda env create -f environment.yml
+#   conda activate wrf-smn
+#
+# Luego, en VSCode: Ctrl+Shift+P -> "Python: Select Interpreter" ->
+# elegir el interprete del entorno "wrf-smn".
+#
+# Actualizar un entorno existente:
+#
+#   conda env update -f environment.yml --prune
+
+name: wrf-smn
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - numpy
+  - matplotlib
+  - netcdf4
+  - cartopy
+  - metpy
+  - geopandas
+  - shapely
+  - pyproj
+  - pip

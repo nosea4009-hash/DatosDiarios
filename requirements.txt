@@ -1,0 +1,17 @@
+# Dependencias del proyecto DatosDiarios (WRF-SMN 4km plots)
+#
+# Recomendado: instalar con conda/mamba (ver environment.yml) porque
+# cartopy y sus dependencias geoespaciales (GEOS, PROJ, GDAL) se resuelven
+# de forma mas confiable que con pip puro, especialmente en Windows.
+#
+# Si preferis pip, primero asegurate de tener instaladas las librerias de
+# sistema GEOS/PROJ/GDAL correspondientes a tu SO.
+
+numpy>=1.24
+matplotlib>=3.7
+netCDF4>=1.6
+cartopy>=0.22
+metpy>=1.6
+geopandas>=0.14
+shapely>=2.0
+pyproj>=3.5
