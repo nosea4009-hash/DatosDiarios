@@ -20,6 +20,7 @@ Requiere geopandas + shapely (incluidas en requirements.txt).
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
@@ -54,6 +55,44 @@ def _detectar_columna_nombre(gdf: "gpd.GeoDataFrame") -> Optional[str]:
         if col != "geometry" and gdf[col].dtype == object:
             return col
     return None
+
+
+def _extraer_texto_comparable(valor) -> str:
+    """Convierte el valor de una celda a un texto comparable/buscable.
+
+    Algunos geojson oficiales de Argentina (por ejemplo el de
+    departamentos de IGN/datos.gob.ar) no guardan la provincia como un
+    texto simple, sino como un objeto anidado dentro de la propiedad, por
+    ejemplo:
+
+        "provincia": {"id": "06", "nombre": "Buenos Aires", "interseccion": 0.0}
+
+    geopandas/pyogrio suele devolver ese objeto anidado ya serializado
+    como un STRING con forma de JSON (no como un dict de Python), por
+    ejemplo: ``'{ "id": "06", "nombre": "Buenos Aires", ... }'``. Si no
+    se detecta y parsea ese JSON para extraer el campo "nombre", se
+    termina usando el texto completo del objeto (tanto para buscar como
+    para nombrar el archivo de salida), lo que ademas rompe la escritura
+    del PNG en Windows porque caracteres como ``{``, ``}``, ``:`` o ``'``
+    no son validos en nombres de archivo.
+    """
+    if isinstance(valor, dict):
+        objeto = valor
+    elif isinstance(valor, str) and valor.strip().startswith("{"):
+        try:
+            objeto = json.loads(valor)
+        except (json.JSONDecodeError, ValueError):
+            objeto = None
+    else:
+        objeto = None
+
+    if isinstance(objeto, dict):
+        for clave in ("nombre", "nom", "name", "NOMBRE", "NAME"):
+            if clave in objeto:
+                return str(objeto[clave])
+        return str(objeto)
+
+    return str(valor)
 
 
 def _detectar_columna_provincia(gdf: "gpd.GeoDataFrame") -> Optional[str]:
@@ -131,7 +170,8 @@ def cargar_region_zoom(
                 "geopandas o usa --geojson-filtro para filtrar por nombre "
                 "de departamento/municipio en su lugar."
             )
-        mascara = gdf[col_provincia].astype(str).str.contains(
+        textos_provincia = gdf[col_provincia].map(_extraer_texto_comparable)
+        mascara = textos_provincia.str.contains(
             filtro_provincia, case=False, na=False, regex=False
         )
         if not mascara.any():
@@ -141,17 +181,18 @@ def cargar_region_zoom(
                 f"geojson"
             )
         gdf = gdf[mascara]
-        nombre_region = str(gdf.iloc[0][col_provincia])
+        nombre_region = _extraer_texto_comparable(gdf.iloc[0][col_provincia])
 
     elif filtro_nombre:
         col_nombre = _detectar_columna_nombre(gdf)
         if col_nombre is not None:
-            mascara = gdf[col_nombre].astype(str).str.contains(
+            textos_nombre = gdf[col_nombre].map(_extraer_texto_comparable)
+            mascara = textos_nombre.str.contains(
                 filtro_nombre, case=False, na=False, regex=False
             )
             if mascara.any():
                 gdf = gdf[mascara]
-                nombre_region = str(gdf.iloc[0][col_nombre])
+                nombre_region = _extraer_texto_comparable(gdf.iloc[0][col_nombre])
             else:
                 raise ValueError(
                     f"No se encontro ninguna region que contenga "
@@ -160,7 +201,7 @@ def cargar_region_zoom(
     elif len(gdf) == 1:
         col_nombre = _detectar_columna_nombre(gdf)
         if col_nombre is not None:
-            nombre_region = str(gdf.iloc[0][col_nombre])
+            nombre_region = _extraer_texto_comparable(gdf.iloc[0][col_nombre])
 
     lon_min, lat_min, lon_max, lat_max = gdf.total_bounds
 

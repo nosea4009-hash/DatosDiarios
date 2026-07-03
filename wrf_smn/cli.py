@@ -142,6 +142,17 @@ def construir_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _sanear_nombre_archivo(texto: str) -> str:
+    """Reemplaza caracteres no validos en nombres de archivo de Windows
+    (``< > : " / \\ | ? *``) y espacios, para evitar errores como
+    ``[Errno 22] Invalid argument`` al guardar el PNG."""
+    caracteres_invalidos = '<>:"/\\|?*'
+    texto_saneado = texto
+    for caracter in caracteres_invalidos:
+        texto_saneado = texto_saneado.replace(caracter, "")
+    return texto_saneado.strip().replace(" ", "_")
+
+
 def _nombre_salida_por_defecto(variable: str, fecha: dt.date, ciclo: str,
                                 sufijo_zoom: str = "") -> str:
     base = f"{variable}_{fecha:%Y%m%d}_{ciclo}Z{sufijo_zoom}.png"
@@ -215,7 +226,7 @@ def ejecutar(argv: list[str] | None = None) -> int:
         ruta_salida = config.OUTPUT_DIR / args.salida if not args.salida.startswith("/") \
             else __import__("pathlib").Path(args.salida)
     else:
-        sufijo_zoom = f"_{region_zoom.nombre.replace(' ', '_')}" if region_zoom else ""
+        sufijo_zoom = f"_{_sanear_nombre_archivo(region_zoom.nombre)}" if region_zoom else ""
         nombre = _nombre_salida_por_defecto(args.variable, args.fecha, args.ciclo, sufijo_zoom)
         ruta_salida = config.OUTPUT_DIR / nombre
 
