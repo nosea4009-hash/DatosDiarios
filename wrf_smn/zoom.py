@@ -56,10 +56,29 @@ def _detectar_columna_nombre(gdf: "gpd.GeoDataFrame") -> Optional[str]:
     return None
 
 
+def _detectar_columna_provincia(gdf: "gpd.GeoDataFrame") -> Optional[str]:
+    """Intenta adivinar la columna que contiene el nombre de la provincia.
+
+    Los geojson de departamentos de Argentina (IGN, INDEC, Datos Argentina,
+    etc.) suelen traer una columna separada para la provincia a la que
+    pertenece cada departamento, distinta de la columna de nombre del
+    departamento en si.
+    """
+    candidatos = [
+        "provincia", "PROVINCIA", "provincia_", "nombre_pro", "NOMBRE_PRO",
+        "in1", "province", "PROVINCE", "prov_nombre", "nam_1", "NAME_1",
+    ]
+    for col in candidatos:
+        if col in gdf.columns:
+            return col
+    return None
+
+
 def cargar_region_zoom(
     ruta_geojson: str | Path,
     margen_grados: float = 0.35,
     filtro_nombre: Optional[str] = None,
+    filtro_provincia: Optional[str] = None,
 ) -> RegionZoom:
     """Carga un geojson y calcula el extent (con margen) para hacer zoom.
 
@@ -73,10 +92,18 @@ def cargar_region_zoom(
         poligono(s), para que el recorte no quede exactamente pegado al
         borde de la region.
     filtro_nombre : str, opcional
-        Si el geojson contiene varias regiones (ej. todos los municipios de
-        una provincia) y se quiere hacer zoom a una sola, se puede pasar un
-        texto (case-insensitive, busqueda parcial) que se busca en la
-        columna de nombre detectada automaticamente.
+        Si el geojson contiene varias regiones (ej. todos los departamentos
+        de una provincia) y se quiere hacer zoom a una sola (un solo
+        departamento/municipio), se puede pasar un texto (case-insensitive,
+        busqueda parcial) que se busca en la columna de nombre de
+        departamento/municipio detectada automaticamente.
+    filtro_provincia : str, opcional
+        Si el geojson contiene todos los departamentos de Argentina (o de
+        varias provincias) y se quiere hacer zoom a UNA PROVINCIA COMPLETA
+        (manteniendo visibles los contornos de TODOS sus departamentos),
+        se pasa el nombre de la provincia (case-insensitive, busqueda
+        parcial). Es mutuamente excluyente con ``filtro_nombre``: si se
+        pasan los dos, se prioriza ``filtro_provincia``.
     """
     ruta_geojson = Path(ruta_geojson)
     if not ruta_geojson.exists():
@@ -93,7 +120,30 @@ def cargar_region_zoom(
         gdf = gdf.to_crs("EPSG:4326")
 
     nombre_region = ruta_geojson.stem
-    if filtro_nombre:
+
+    if filtro_provincia:
+        col_provincia = _detectar_columna_provincia(gdf)
+        if col_provincia is None:
+            raise ValueError(
+                "No se pudo detectar una columna de provincia en el geojson "
+                "(se probaron nombres como 'provincia', 'PROVINCIA', "
+                "'nombre_pro', etc.). Revisa las columnas del archivo con "
+                "geopandas o usa --geojson-filtro para filtrar por nombre "
+                "de departamento/municipio en su lugar."
+            )
+        mascara = gdf[col_provincia].astype(str).str.contains(
+            filtro_provincia, case=False, na=False, regex=False
+        )
+        if not mascara.any():
+            raise ValueError(
+                f"No se encontro ninguna provincia que contenga "
+                f"'{filtro_provincia}' en la columna '{col_provincia}' del "
+                f"geojson"
+            )
+        gdf = gdf[mascara]
+        nombre_region = str(gdf.iloc[0][col_provincia])
+
+    elif filtro_nombre:
         col_nombre = _detectar_columna_nombre(gdf)
         if col_nombre is not None:
             mascara = gdf[col_nombre].astype(str).str.contains(
