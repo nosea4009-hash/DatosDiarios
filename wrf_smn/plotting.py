@@ -414,26 +414,45 @@ def _texto_fecha_validez(campo: CampoGrillado) -> str:
 
 
 def _agregar_titulo(fig, ax, campo: CampoGrillado, titulo_variable: str) -> None:
+    """Dibuja titulo + subtitulo ancaldos al eje del mapa (``ax``), no a la
+    figura completa.
+
+    IMPORTANTE: no usar ``fig.text()`` con coordenadas fijas de figura
+    (0-1) para el titulo. Cartopy reposiciona el GeoAxes dentro de la
+    figura para mantener el aspecto real de los datos (aspect='equal'); en
+    recortes muy alargados (p. ej. zoom a una provincia angosta y alta
+    como Buenos Aires) el eje termina ocupando una fraccion de figura
+    distinta a la esperada, y un titulo con posicion fija se solapa con
+    las etiquetas de la grilla de coordenadas superior. Al usar
+    ``ax.transAxes`` con ``clip_on=False``, el titulo queda siempre
+    correctamente ubicado por encima del mapa, sin importar donde termine
+    posicionado el eje.
+    """
     fecha_txt = _texto_fecha_validez(campo)
     titulo = f"{titulo_variable} correspondiente a ({fecha_txt})"
-    fig.text(
-        0.5, 0.965, titulo,
-        ha="center", va="top",
-        fontsize=config.FONTSIZE_TITULO,
-        fontfamily=config.FUENTE_BOLD,
-        fontweight="bold",
-        color="black",
-    )
     subtitulo = (
         f"Modelo WRF 4km - SMN | Ciclo {campo.ciclo}Z del "
         f"{campo.fecha_init:%d/%m/%Y}"
     )
-    fig.text(
-        0.5, 0.935, subtitulo,
-        ha="center", va="top",
+
+    ax.text(
+        0.5, 1.085, titulo,
+        transform=ax.transAxes,
+        ha="center", va="bottom",
+        fontsize=config.FONTSIZE_TITULO,
+        fontfamily=config.FUENTE_BOLD,
+        fontweight="bold",
+        color="black",
+        clip_on=False,
+    )
+    ax.text(
+        0.5, 1.045, subtitulo,
+        transform=ax.transAxes,
+        ha="center", va="bottom",
         fontsize=config.FONTSIZE_SUBTITULO,
         fontfamily=config.FUENTE_REGULAR,
         color="#333333",
+        clip_on=False,
     )
 
 
