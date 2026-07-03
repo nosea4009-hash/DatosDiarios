@@ -12,10 +12,18 @@ Temperatura minima del dia siguiente al ciclo 00Z de hoy, mapa completo:
 
     python main.py --variable tmin --fecha 2026-07-03 --ciclo 00 --dia 1
 
-Temperatura maxima, con zoom a un municipio via geojson:
+Temperatura maxima, con zoom a un solo municipio/departamento via geojson:
 
     python main.py --variable tmax --fecha 2026-07-03 --ciclo 00 --dia 1 \\
         --geojson data/geojson/pergamino.geojson
+
+Temperatura minima, con zoom a una PROVINCIA COMPLETA (mostrando el
+contorno de todos sus departamentos), a partir de un geojson que contiene
+los departamentos de toda Argentina o de varias provincias:
+
+    python main.py --variable tmin --fecha 2026-07-03 --ciclo 00 --dia 1 \\
+        --geojson data/geojson/departamentos_argentina.geojson \\
+        --geojson-provincia "Buenos Aires"
 
 Precipitacion acumulada en las primeras 24 horas de pronostico:
 
@@ -95,7 +103,18 @@ def construir_parser() -> argparse.ArgumentParser:
         "--geojson-filtro", type=str, default=None,
         help=(
             "Si el geojson contiene varias regiones, texto para filtrar "
-            "por nombre (busqueda parcial, insensible a mayusculas)."
+            "por nombre de departamento/municipio (busqueda parcial, "
+            "insensible a mayusculas). Muestra solo ese departamento."
+        ),
+    )
+    parser.add_argument(
+        "--geojson-provincia", type=str, default=None,
+        help=(
+            "Si el geojson contiene todos los departamentos de Argentina "
+            "(o de varias provincias), texto para filtrar por PROVINCIA "
+            "(busqueda parcial, insensible a mayusculas). Hace zoom a la "
+            "provincia completa manteniendo visibles los contornos de "
+            "TODOS sus departamentos. Tiene prioridad sobre --geojson-filtro."
         ),
     )
     parser.add_argument(
@@ -154,7 +173,9 @@ def ejecutar(argv: list[str] | None = None) -> int:
     if args.geojson:
         try:
             region_zoom = zoom_mod.cargar_region_zoom(
-                args.geojson, filtro_nombre=args.geojson_filtro
+                args.geojson,
+                filtro_nombre=args.geojson_filtro,
+                filtro_provincia=args.geojson_provincia,
             )
         except Exception as exc:
             print(f"Error al cargar el geojson '{args.geojson}': {exc}", file=sys.stderr)

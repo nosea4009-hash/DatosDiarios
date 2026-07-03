@@ -93,13 +93,31 @@ para refrescarlos).
    ```
 
    Si el geojson contiene varias regiones (por ejemplo, todos los
-   departamentos de una provincia) y queres una sola, filtra por nombre:
+   departamentos de una provincia) y queres una sola, filtra por nombre
+   de departamento/municipio:
 
    ```bash
    python main.py --variable tmin --fecha 2026-07-03 --ciclo 00 --dia 1 \
        --geojson data/geojson/departamentos_cordoba.geojson \
        --geojson-filtro "Rio Cuarto"
    ```
+
+   **Zoom a una provincia completa (con todos sus departamentos):**
+   Si tu geojson trae los departamentos de toda Argentina (o de varias
+   provincias juntas) y queres hacer zoom a UNA PROVINCIA ENTERA, mostrando
+   el contorno de TODOS sus departamentos (no solo uno), usa
+   `--geojson-provincia` en lugar de `--geojson-filtro`:
+
+   ```bash
+   python main.py --variable tmax --fecha 2026-07-03 --ciclo 00 --dia 1 \
+       --geojson data/geojson/departamentos_argentina.geojson \
+       --geojson-provincia "Buenos Aires"
+   ```
+
+   Esto filtra por la columna de provincia del geojson (se detecta
+   automaticamente: `provincia`, `PROVINCIA`, `nombre_pro`, etc.), recorta
+   el mapa al area de esa provincia y dibuja el contorno de cada uno de
+   sus departamentos.
 
 El mapa recorta automaticamente al area de la region (con un margen) y
 dibuja su contorno en negro sobre el mapa, junto con las ciudades
@@ -123,7 +141,8 @@ python main.py --help
 | `--dia` | Solo tmin/tmax: plazo en dias (0-3, default: 1) |
 | `--plazo-inicio` / `--plazo-fin` | Solo precip: ventana horaria del acumulado |
 | `--geojson` | Ruta a un `.geojson` para hacer zoom |
-| `--geojson-filtro` | Filtro de nombre si el geojson tiene varias regiones |
+| `--geojson-filtro` | Filtro por nombre de departamento/municipio (muestra uno solo) |
+| `--geojson-provincia` | Filtro por nombre de provincia (muestra todos sus departamentos) |
 | `--extent` | Recorte manual: `LON_MIN LON_MAX LAT_MIN LAT_MAX` |
 | `--max-ciudades` | Cantidad maxima de ciudades a rotular (default: 45) |
 | `--salida` | Nombre/ruta del PNG de salida |
